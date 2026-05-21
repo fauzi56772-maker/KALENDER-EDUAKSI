@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Lini Masa - 3 Dimensi Waktu</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-amber-50 text-stone-900 font-sans min-h-screen pb-24 transition-colors duration-500">
+
+    <div id="halamanLogin" class="fixed inset-0 bg-gradient-to-br from-emerald-900 via-slate-900 to-amber-950 flex flex-col justify-center items-center z-50 p-6">
+        <div class="w-full max-w-md bg-stone-100 border-2 border-amber-800/30 rounded-2xl p-6 shadow-2xl text-center">
+            <div class="flex justify-center mb-2">
+                <div class="bg-emerald-100 p-4 rounded-full border border-emerald-500/30 text-emerald-700 animate-pulse">
+                    <i class="fa-solid fa-hourglass-start text-3xl"></i>
+                </div>
+            </div>
+            <h1 class="text-xl font-black tracking-wider text-emerald-800">CHRONO CALENDAR</h1>
+            <p class="text-xs text-stone-500 mt-1">Sistem Penyelaras Masehi, Hijriyah, & Jawa</p>
+            
+            <div class="mt-6 space-y-2">
+                <button onclick="prosesLoginSederhana('Google')" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-stone-50 py-2.5 rounded-xl font-medium text-xs border border-stone-300 text-stone-700 shadow-sm cursor-pointer">
+                    <i class="fa-brands fa-google text-red-500 text-base"></i> Masuk dengan Google
+                </button>
+                <button onclick="prosesLoginSederhana('Apple')" class="w-full flex items-center justify-center gap-3 bg-stone-950 hover:bg-stone-900 py-2.5 rounded-xl font-medium text-xs text-white shadow-sm cursor-pointer">
+                    <i class="fa-brands fa-apple text-base"></i> Masuk dengan Apple
+                </button>
+                <div class="py-2 flex items-center text-xs text-stone-400 before:flex-1 before:border-t before:border-stone-200 before:mr-2 after:flex-1 after:border-t after:border-stone-200 after:ml-2">atau</div>
+                <input type="email" id="emailInput" placeholder="Masukkan Alamat Email..." class="w-full bg-white text-xs rounded-xl px-4 py-2.5 border border-stone-300 focus:outline-none focus:border-emerald-600">
+                <button onclick="mintaVerifikasiTinggi()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2.5 rounded-xl cursor-pointer shadow">
+                    Kirim Verifikasi Keamanan Tinggi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="halamanVerifikasi" class="fixed inset-0 bg-stone-950/80 backdrop-blur-md flex flex-col justify-center items-center z-50 p-6 hidden">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 text-center shadow-xl border border-amber-900/20">
+            <i class="fa-solid fa-shield-halved text-4xl text-blue-600 mb-3"></i>
+            <h2 class="text-base font-bold text-stone-800">Verifikasi Keamanan Tinggi</h2>
+            <p class="text-xs text-stone-500 mt-1">Masukkan kode aman yang dikirim ke email sistem Python</p>
+            <input type="text" id="kodeOtp" placeholder="Contoh: 777999" class="w-full bg-stone-50 text-center tracking-widest font-mono text-base rounded-xl py-2 my-4 border border-stone-300 focus:outline-none">
+            <button onclick="boomMasukHalamanUtama()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-xl cursor-pointer">
+                BOOM! Buka Lini Masa
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto px-4 pt-4 space-y-4">
+        
+        <header class="flex items-center justify-between bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-600 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow">
+                    EA
+                </div>
+                <div>
+                    <h3 class="font-bold text-xs text-stone-800">Penjelajah Waktu Eduaksi</h3>
+                    <p class="text-[10px] text-stone-400"><i class="fa-solid fa-circle text-emerald-500 text-[8px] mr-1"></i> Mode Penyelaras Aktif</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-gear text-stone-400 text-sm"></i>
+        </header>
+
+        <section class="grid grid-cols-3 gap-1.5 bg-stone-200/60 p-1 rounded-xl border border-stone-300/40">
+            <button onclick="gantiTipeKalender('masehi')" id="btn-masehi" class="py-2 rounded-lg text-xs font-bold transition cursor-pointer bg-blue-600 text-white shadow shadow-blue-500/20">Masehi (Biru)</button>
+            <button onclick="gantiTipeKalender('hijriyah')" id="btn-hijriyah" class="py-2 rounded-lg text-xs font-bold transition cursor-pointer text-stone-600 hover:bg-white/50">Hijriyah (Hijau)</button>
+            <button onclick="gantiTipeKalender('jawa')" id="btn-jawa" class="py-2 rounded-lg text-xs font-bold transition cursor-pointer text-stone-600 hover:bg-white/50">Jawa (Cokelat)</button>
+        </section>
+
+        <section class="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm flex gap-2">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+                <input type="text" id="inputCariKalender" oninput="cariKejadianSejarah()" placeholder="Ketik tanggal, bulan, atau tahun..." class="w-full bg-stone-50 text-xs rounded-xl pl-9 pr-3 py-2 border border-stone-200 focus:outline-none focus:border-stone-400 text-stone-800">
+            </div>
+        </section>
+
+        <main class="bg-white border border-stone-200 rounded-2xl p-4 space-y-4 shadow-sm min-h-[250px]">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-2">
+                <h2 id="judulKalenderAktif" class="text-xs font-black tracking-wider text-blue-700 uppercase"><i class="fa-solid fa-calendar-days mr-1.5"></i> Kalender Masehi</h2>
+                <span class="text-[9px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-full font-mono">Lini Masa Asli</span>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2" id="boxAngkaTahun">
+                </div>
+
+            <div class="space-y-2 pt-2">
+                <h4 class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">Hari Spesial & Kejadian Sejarah:</h4>
+                <div id="listHariBesar" class="space-y-2">
+                    </div>
+            </div>
+        </main>
+
+        <section class="bg-gradient-to-br from-amber-100 to-orange-50/60 border border-amber-800/20 rounded-2xl p-4 space-y-3 shadow-sm">
+            <h3 class="text-xs font-black tracking-wider text-amber-900 uppercase"><i class="fa-solid fa-clock-history text-amber-700 mr-1.5"></i> Pengatur Jadwal Kegiatan Mandiri</h3>
+            <div class="space-y-2">
+                <input type="text" id="inputNamaKegiatan" placeholder="Nama agenda kegiatan..." class="w-full bg-white text-xs rounded-xl px-3 py-2 border border-amber-200 focus:outline-none focus:border-amber-500">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="date" id="inputTanggalKegiatan" class="bg-white text-xs rounded-xl px-3 py-2 border border-amber-200 text-stone-700 focus:outline-none">
+                    <button onclick="simpanAgendaMandiri()" class="bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold py-2 rounded-xl cursor-pointer shadow transition">Kunci Jadwal</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-stone-900 text-stone-100 border border-stone-800 rounded-2xl p-4 space-y-3 shadow-xl">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+                <h3 class="text-xs font-black tracking-wider text-amber-400 uppercase"><i class="fa-solid fa-newspaper mr-1.5"></i> Tempel Berita Lintas Era</h3>
+                <span class="text-[9px] bg-stone-800 text-stone-400 px-2 py-0.5 rounded font-mono">Detail Detik</span>
+            </div>
+            
+            <div class="space-y-2.5">
+                <textarea id="isiBerita" rows="2" placeholder="Tulis kejadian/berita penting yang terjadi di linimasa ini..." class="w-full bg-stone-950 text-xs rounded-xl p-3 border border-stone-800 focus:outline-none focus:border-amber-400 text-stone-200"></textarea>
+                
+                <div class="grid grid-cols-2 gap-2 text-stone-800">
+                    <div class="space-y-1">
+                        <label class="text-[10px] text-stone-400 block">Tanggal & Bulan</label>
+                        <input type="date" id="beritaTgl" class="w-full bg-stone-100 text-xs rounded-lg p-2 focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] text-stone-400 block">Tahun Akurat</label>
+                        <input type="number" id="beritaThn" placeholder="Contoh: 1" class="w-full bg-stone-100 text-xs rounded-lg p-2 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-1.5 text-stone-900">
+                    <input type="number" id="beritaJam" placeholder="Jam" max="23" min="0" class="bg-stone-100 text-center text-xs rounded-lg p-1.5 focus:outline-none">
+                    <input type="number" id="beritaMenit" placeholder="Menit" max="59" min="0" class="bg-stone-100 text-center text-xs rounded-lg p-1.5 focus:outline-none">
+                    <input type="number" id="beritaDetik" placeholder="Detik" max="59" min="0" class="bg-stone-100 text-center text-xs rounded-lg p-1.5 focus:outline-none">
+                </div>
+
+                <button onclick="tempelBeritaSejarah()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 text-xs font-black py-2.5 rounded-xl cursor-pointer shadow hover:opacity-90 transition">
+                    TEMPELKAN KE LINI MASA WEBSITE
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
